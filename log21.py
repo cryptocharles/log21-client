@@ -48,7 +48,7 @@ def status_wallet(client, wallet):
     result['addresses'] = status_addresses
     return result
 
-def inbox(client, config)
+def inbox(client, config):
     resp = client.get_notifications(config.username, detailed=True)
     resp_json = resp.json()
     if "messages" not in resp_json:
