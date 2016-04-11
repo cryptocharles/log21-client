@@ -48,6 +48,15 @@ def status_wallet(client, wallet):
     result['addresses'] = status_addresses
     return result
 
+def inbox(client, config)
+    resp = client.get_notifications(config.username, detailed=True)
+    resp_json = resp.json()
+    if "messages" not in resp_json:
+        return []
+    unreads = resp_json["messages"]["unreads"]
+    reads = resp_json["messages"]["reads"]
+    return unreads + reads;
+
 def all_logs():
     ctx = initialize_client()
     client = ctx['client']
@@ -59,6 +68,7 @@ def all_logs():
     result['account'] = status.status_account(config, wallet)
     result['logs'] = client.get_earning_logs()['logs']
     result['earning'] = client.get_earnings()
+    result['inbox'] = inbox(client, config)
     return result
 
 @click.command()
