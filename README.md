@@ -11,3 +11,7 @@
 ## To use the log21 client
 
 `log21`
+
+## To send sensor21 measurements
+
+`log21-sensor --db /home/twenty/sensor21/measurements.db`
