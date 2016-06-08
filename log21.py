@@ -2,6 +2,7 @@ import sys
 import json
 import click
 import two1
+import sqlite3
 from two1.commands.util import bitcoin_computer
 from two1.commands.config import Config
 from two1.commands import status
@@ -70,6 +71,31 @@ def all_logs():
     result['earning'] = client.get_earnings()
     result['inbox'] = inbox(client, config)
     return result
+
+def sensor_measurements(db):
+    measurements_count = 60 * 24
+    conn = sqlite3.connect(db)
+    cursor = conn.cursor()
+    res = cursor.execute('SELECT * FROM Barometer ORDER BY Id DESC LIMIT (?);', (measurements_count,))
+    data = res.fetchall()
+    conn.close()
+    barometer_package = []
+    for x in range(0, len(data)):
+        barometer_package.append({
+            'timestamp': data[x][1],
+            'temperature': data[x][2],
+            'pressure': data[x][3]
+        })
+    return json.dumps(barometer_package)
+
+@click.command()
+@click.option("--db", default='/home/twenty/sensor21/measurements.db')
+def cli_sensor(db):
+    json_logs = sensor_measurements(db)
+    print(json_logs)
+    token_response = requests.get(url=server_url + 'tokens')
+    upload_response = requests.post(url=server_url + 'measurements/' + token_response.text, json=json_logs)
+    click.echo(json.loads(upload_response.text))
 
 @click.command()
 def cli():
