@@ -92,7 +92,7 @@ def sensor_measurements(db):
 @click.option("--db", default='/home/twenty/sensor21/measurements.db')
 def cli_sensor(db):
     json_logs = sensor_measurements(db)
-    token_response = requests.get(url=server_url + 'tokens')
+    token_response = requests.get(url=server_url + 'sensor-tokens')
     upload_response = requests.post(url=server_url + 'measurements/' + token_response.text, json=json_logs)
     click.echo(json.loads(upload_response.text))
 
