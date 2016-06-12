@@ -73,7 +73,7 @@ def all_logs():
     return result
 
 def sensor_measurements(db):
-    measurements_count = 60 * 24
+    measurements_count = 60 * 24 * 7
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
     res = cursor.execute('SELECT * FROM Barometer ORDER BY Id DESC LIMIT (?);', (measurements_count,))
